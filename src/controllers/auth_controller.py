@@ -4,6 +4,7 @@ from models.user import User, user_schema, users_schema
 from flask_jwt_extended import create_access_token
 from sqlalchemy.exc import IntegrityError
 from psycopg2 import errorcodes
+from datetime import timedelta
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -29,4 +30,16 @@ def auth_register():
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
             return {'error': f'The {err.orig.diag.column_name} is required'}, 409 # This line will show the name of a field eg. password or email if the user does not input
         
-
+@auth_bp.route('/login', methods=['POST'])
+def auth_login():
+    body_data = request.get_json()
+    # how to find the user by their email using a statement
+    stmt = db.select(User).filter_by(email=body_data.get('email'))
+    user = db.session.scalar(stmt)
+    # if user credentials are correct
+    if user and bcrypt.check_password_hash(user.password, body_data.get('password')):
+        token = create_access_token(identity=str(user.id), expires_delta=timedelta(days=1)) #this creates the session token and how long it is valid for 
+        return { 'email': user.email, 'token': token, 'is_admin': user.is_admin }
+    else:
+        return { 'error': 'Invalid email or password'}, 401 # this is the error message to be thrown if the user credentials are incorrectly entered
+    
