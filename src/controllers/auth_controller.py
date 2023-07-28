@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from psycopg2 import errorcodes
 from datetime import timedelta
 
-auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth') # this sets the prefix for all the requests in this file
 
 @auth_bp.route('/register', methods=['POST'])
 def auth_register():
@@ -37,8 +37,8 @@ def auth_login():
     stmt = db.select(User).filter_by(email=body_data.get('email'))
     user = db.session.scalar(stmt)
     # if user credentials are correct
-    if user and bcrypt.check_password_hash(user.password, body_data.get('password')):
-        token = create_access_token(identity=str(user.id), expires_delta=timedelta(days=1)) #this creates the session token and how long it is valid for 
+    if user and bcrypt.check_password_hash(user.password, body_data.get('password')): # this checks if the password matches the username at login
+        token = create_access_token(identity=str(user.id), expires_delta=timedelta(days=1)) #this creates the session token and how long it is valid for, in this case 1 day
         return { 'email': user.email, 'token': token, 'is_admin': user.is_admin }
     else:
         return { 'error': 'Invalid email or password'}, 401 # this is the error message to be thrown if the user credentials are incorrectly entered

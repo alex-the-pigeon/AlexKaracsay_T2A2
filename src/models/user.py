@@ -12,8 +12,10 @@ class User(db.Model):
 
 # this shows the fields we want to convert to JSON for the front end
 class UserSchema(ma.Schema):
+    riders = fields.List(fields.Nested('RiderSchema', exclude=['user'])) # specifying which schema this relates to 
+
     class Meta:
-        fields = ('id', 'username', 'email', 'password', 'is_admin')
+        fields = ('id', 'username', 'email', 'password', 'is_admin', 'riders')
 
 # specifying one user and many users, excluding user password from being sent to front end for security
 user_schema = UserSchema(exclude=['password'])
