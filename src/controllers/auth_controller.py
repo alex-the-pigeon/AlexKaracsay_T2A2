@@ -1,10 +1,10 @@
 from flask import Blueprint, request
 from init import db, bcrypt
 from models.user import User, user_schema, users_schema
-from flask_jwt_extended import create_access_token
-from sqlalchemy.exc import IntegrityError
-from psycopg2 import errorcodes
-from datetime import timedelta
+from flask_jwt_extended import create_access_token # this allows us to create access tokens for the session
+from sqlalchemy.exc import IntegrityError # this will show us error codes specific to SQLAlchemy ie. a not_null_violation if a user left the email blank
+from psycopg2 import errorcodes # this allows us to throw specific error codes if something goes wrong ie. when creating a user if the email already exists
+from datetime import timedelta # this is to specify a timeframe that the session token will be active for before expiry. In this code it is 1 day.
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth') # this sets the prefix for all the requests in this file
 

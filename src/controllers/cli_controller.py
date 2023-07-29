@@ -1,6 +1,7 @@
 from flask import Blueprint
 from init import db, bcrypt 
 from models.user import User 
+from models.rider import Rider
 
 db_commands = Blueprint('db', '__name__')
 
@@ -32,7 +33,31 @@ def seed_db():
         )
     ]
     db.session.add_all(users)
+
+    riders = [
+        Rider(
+            last_name='Doe',
+            first_name='Jane',
+            sex='Female',
+            age='33',
+            user=users[0],
+        ),
+        Rider(
+            last_name='Doe',
+            first_name='John',
+            sex='Male',
+            age='35',
+            user=users[1],  
+        
+        )
+    ]
+
+    db.session.add_all(riders)
+
+    # add races here
+
+    # add safety contacts here
+
     db.session.commit()
     print("Tables Seeded")
 
-    # hello

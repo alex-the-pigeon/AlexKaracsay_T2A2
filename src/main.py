@@ -3,9 +3,12 @@ import os
 from init import db, ma, bcrypt, jwt 
 from controllers.cli_controller import db_commands
 from controllers.auth_controller import auth_bp
+from controllers.rider_controller import riders_bp
 
 def create_app():
     app = Flask(__name__)
+
+    app.json.sort_keys = False
     #                                    linking to .env file                                     
     app.config["SQLALCHEMY_DATABASE_URI"]=os.environ.get("DATABASE_URL")
     app.config["JWT_SECRET_KEY"]=os.environ.get("JWT_SECRET_KEY")
