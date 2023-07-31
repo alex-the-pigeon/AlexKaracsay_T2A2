@@ -3,7 +3,7 @@ from marshmallow import fields
 
 class Rider(db.Model):
     __tablename__ = "riders"
-# this is specifying the data fields and the type of input eg integer, string(words) etc. The (50) refers to how many characters the input is limited to.
+# this is creating the table for the rider data by column. Inside the brackets the data type is specified as well as the character limit for the input (50)
     id = db.Column(db.Integer, primary_key=True)
     last_name = db.Column(db.String(50))
     first_name = db.Column(db.String(50))

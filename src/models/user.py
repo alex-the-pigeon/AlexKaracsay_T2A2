@@ -4,7 +4,7 @@ from marshmallow import fields
 # creating class and naming table
 class User(db.Model):
     __tablename__ = 'users'
-# table attributes !!! having issues when trying to seed table. sqlalchemy.exc.DataError: (psycopg2.errors.StringDataRightTruncation) value too long for type character varying(50)
+# table attributes
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50))
     email = db.Column(db.String(50), nullable=False, unique=True)

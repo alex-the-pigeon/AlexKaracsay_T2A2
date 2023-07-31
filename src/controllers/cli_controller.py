@@ -5,11 +5,6 @@ from models.rider import Rider
 
 db_commands = Blueprint('db', '__name__')
 
-# this organises our routes so we don't have to type out full route every time
-# auth_routes = Blueprint('auth', __name__, url_prefix="/auth/")
-
-# @auth_routes.route("/register")
-
 # database commands to create, delete and update user table
 @db_commands.cli.command('create')
 def create_db():
@@ -24,7 +19,7 @@ def drop_db():
 @db_commands.cli.command('seed')
 def seed_db():
     users = [
-       # creating an admin for example
+       # creating an admin for example of showing user creation
         User(
             username="admin",
             email="admin@admin.com",
@@ -33,7 +28,7 @@ def seed_db():
         )
     ]
     db.session.add_all(users)
-
+    # creating some example riders, each associated with a single user account
     riders = [
         Rider(
             last_name='Doe',
@@ -54,9 +49,41 @@ def seed_db():
 
     db.session.add_all(riders)
 
-    # add races here
+    # creating some example races linked to a single user
+     
+    races = [
+        Race(
+            race_name='Turbulence',
+            race_type='Downhill',
+            user=users[1],
+        ),
+        Race(
+            race_name='Lactic Acid',
+            race_type='Enduro',
+            user=users[1],
 
-    # add safety contacts here
+        )
+    ]
+
+    db.session.add_all(races)
+# example safety contacts for two different riders
+    safety = [
+        Safety(
+            last_name='Williams',
+            first_name='Steve',
+            relationship='Partner',
+            user=users[0],
+        ),
+        Safety(
+            last_name='Capone',
+            first_name='Tony',
+            relationship='Brother',
+            user=users[1],
+        
+        )
+    ]
+
+    db.session.add_all(safety)
 
     db.session.commit()
     print("Tables Seeded")
