@@ -20,11 +20,13 @@ The data typically gathered in a mountain bike race includes personal informatio
 In this app specifically, techniques such as password hashing (for user accounts) using Bcrypt, session tokens with JWT and setting a dedicated system admin will be employed to help establish security for the database. With further updates and the inclusion of front-end, establishing some sort of cloud-back up could be a good idea in case the database gets compromised or corrupt.
 
 The overall structure of this app is comprised of four tables:
-A ‘users’ table which represents the user who is creating an account and interacting with the API.
-A ‘riders’ table which houses the personal data of each rider (name, sex, age)
-A ‘races’ table which contains the race name and type
-A ‘safety’ table which holds the rider’s emergency contact name, phone number and relationship to rider.
-Users will be able to create an account, add the details for a rider, their emergency contact details and enter races directly. Hypothetical future additions to the app could include an ecommerce payment system for race entry fees and even merchandise that can be purchased ahead of the event which would include an inventory system. In conclusion, the overall aim of this app is to create an easy to use and manage organisational tool for mountain bike event management.
+- A ‘users’ table which represents the user who is creating an account and interacting with the API.
+- A ‘riders’ table which houses the personal data of each rider (name, sex, age)
+- A ‘races’ table which contains the race name and type
+- A ‘safety’ table which holds the rider’s emergency contact name, phone number and relationship to rider.
+
+Users will be able to create an account, add the details for a rider, their emergency contact details and enter races directly. Hypothetical future additions to the app could include an ecommerce payment system for race entry fees and even merchandise that can be purchased ahead of the event which would include an inventory system. In conclusion, the overall aim of this app is to create an easy 
+to use and manage organisational tool for mountain bike event management.
 
 
 ## R3
@@ -50,7 +52,7 @@ SQL standards exist to define minimum functionality and inter-operability requir
 
 **Open-source and free**
 
-Another big plus for using PostgreSQL is that it is completely free and open-source to use however you wish. It is an open-source project managed by a development community managed by The PostgreSQL Global Development Group. It has had community-driven development for decades and a large amount of extensions and applications are available to enhance the functionality of the PostgreSQL software. It is a powerful tool used by individuals all the way to huge global corporations like Apple, Instagram and even NASA to handle relational databases. (NASA uses PostgreSQL to store orbit data from the Space Station!)
+Another big plus for using PostgreSQL is that it is completely free and open-source to use however you wish. It is an open-source project maintained by a development community managed by The PostgreSQL Global Development Group. It has had community-driven development for decades and a large amount of extensions and applications are available to enhance the functionality of the PostgreSQL software. It is a powerful tool used by individuals all the way to huge global corporations like Apple, Instagram and even NASA to handle relational databases. (NASA uses PostgreSQL to store orbit data from the Space Station!)
 
 PostgreSQL’s advantages outweigh the disadvantages. The two main drawbacks to using PostgreSQL include lack of ownership and sometimes slower performance when compared to other database management systems. One downside to being open-source is that PostgreSQL is not owned by one particular organisation, therefore it has no “warranty”, liability or indemnity protection if things go wrong. Because it is managed and worked on by a large community of developers, compatibility issues can occur for some users which may require additional software or hardware to run an open-sourced program. There can also be challenges to performance particularly when it comes to read speed as well as data recovery when compared to other systems such as MySQL.
 
@@ -98,33 +100,42 @@ Psycopg2, JWT and Bcrypt are third-party applications that will be used in this 
 
 Psycopg2 is a connector library that allows us to connect our PostgreSQL database to our Python script. It is the most popular PostgreSQL adapter (also referred to as a driver) for the Python programming language. It is “wrapper” around the C programming language interface for PostgreSQL, libpq. An example of what it can do is automatically convert the result of an PostgreSQL array data type to a Python list. 
 
+
 **JWT**
 
 JSON (JavaScript Object Notation) is a lightweight data interchange format that is easy for people to read and write and easy for machines to parse and generate. It is a subset of the JavaScript programming language. JSON Web Token (JWT) is a compact and self-contained way to securely transmit information between parties as a JSON object. The information being transferred can be verified and trusted because it has a digital signature. Signed tokens will be used in this project to generate a login session token that will allow the user to login securely, for added security this token will expire after a specified time period. 
+
+**Bcrypt**
+
+Bcrypt is a cryptographic hashing function designed to hash and safe-store in the back-end of apps in a way that is less vulnerable to dictionary-based cyberattacks. Bcrypt one-way hashes passwords into a fixed-length thread of characters, meaning that once the password has been hashed it cannot be reversed to its original form. When a user logs into their account in the API, Bcrypt hashes their password anew and makes a comparison between the new hash value and the other version stored in the system memory to check if they match. Bcrypt also adds a random piece of data (referred to as ‘salt’) to make the hash unique that makes it almost impossible to break with automated guesses in a brute force attack for example. Another thing Bcrypt employs is a “cost factor”, which determines the number of password iterations and hash rounds to be performed. This increases the amount of time and effort as well as computational resources required to calculate the final value, making it even more robust against attack. This “cost factor” makes Bcrypt a slow algorithm which makes it a safe password-storing tool.
 
 ## R8 and R9
 
 ![ERD](./docs/mtb_api.png)
 
-The **users** table represents the information collected from a user who creates an account through the application. It contains the attributes **username**, **email**, **password** and **is_admin** (which shows with a boolean value if the particular user is or is not an admin). This table is directly linked to the *riders* table in a one(and only one) to zero-to-many relationship because there *needs* to be one user, but *zero* or *more* riders can be added by that user to the account (eg. family members). Riders can can only be added to the database by *one* user_id, which is the foreign key linking the two tables.
+The **users** table represents the information collected from a user who creates an account through the application. It contains the attributes **username**, **email**, **password** and **is_admin** (which shows with a boolean value if the particular user is or is not an admin). This table is directly linked to the *riders* table in a one(and only one) to zero-to-many relationship because there *needs* to be one user, but *zero* or *more* riders can be added by that user to the account (eg. family members). Riders can only be added to the database by *one* user_id, which is the foreign key linking the two tables.
 
 The **riders** table contains the identifying data for each rider entered in the event. **last_name**, **first_name**, **sex** and **age** are collected here for the purpose of identification as well as being able to sort by sex (potential integration with other tables for creating different categories) as well as rider age (again for creating age groups). This table is linked via user_id foreign key to the id of users table. Each rider needs to have one ‘safety contact’, so this table is joined to the **safety** table via one-and-only one relationship, rider_id. 
 
-The **safety** table contains the **contact_name**, **contact_phone** and *relationship** (relationship to rider ie, parent or partner) attributes. It is joined to the *riders* table by a one-and-only one relationship through the safety table’s ‘rider_id’ foreign key. There can only be one safety contact per rider.
+The **safety** table contains the **contact_name**, **contact_phone** and **relationship** (relationship to rider ie, parent or partner) attributes. It is joined to the *riders* table by a one-and-only one relationship through the safety table’s ‘rider_id’ foreign key. There can only be one safety contact per rider.
 
-The **races** table contains the attributes **race_name** and *race_type* which specify the name of the race as well as what general type it is, for example ‘downhill’ or ‘enduro’. It is connected to the **riders** table by a one-and-only one to a zero-to-many relationship as one rider can enter in zero or many races but those races can only be linked to that one rider_id who is entering (on that account). 
+The **races** table contains the attributes **race_name** and **race_type** which specify the name of the race as well as what general type it is, for example ‘downhill’ or ‘enduro’. It is connected to the **riders** table by a one-and-only one to a zero-to-many relationship as one rider can enter in zero or many races but those races can only be linked to that one rider_id who is entering (on that account). 
 
 
 ## R10
 
-In order to keep organised, both a Trello board and to-do checklist were used during the planning and execution of this project. I favour the to-do list stored locally on my machine because it’s easy for me to access not only on my computer but also on my phone (through the cloud) so if I remember something, it is easy for me to quickly add to/update the list. Because of this I sometimes forget to update the Trello board when I actually complete a task so I have included both the link to the board as well as screenshots from my to-do list to show what I’ve been working with. A lot of plates were being juggled this term in study/life/work which has been a massive challenge and caused me to not always have a consistent amount of time to work on some features. I have done my best to include as much detail as possible in this documentation as well as code comments explaining what I’ve done and why. 
+In order to keep organised, both a Trello board and to-do checklist were used during the planning and execution of this project. I favour the to-do list stored locally on my machine because it’s easy for me to access not only on my computer but also on my phone (through the cloud) so if I remember something, it is easy for me to quickly add to/update the list. Because of this I sometimes forget to update the Trello board when I actually complete a task so I have included both the link to the board as well as screenshots from my to-do list to show what I’ve been working with. A lot of plates were being juggled this term in study/life/work which has been a **massive** challenge and caused me to not always have a consistent amount of time to work on some features. I have done my best to include as much detail as possible in this documentation as well as code comments explaining what I’ve done and why. 
 
 [Trello board](https://trello.com/b/SlOmm3d3/api-webserver)
 
-![To-do](./docs/)
+I like to organise my lists by category so I can easily see what goes where and can tick off things as I go. This is the to-do list I used for the project. 
+
+![To-do](./docs/to_do.png)
 
 
+## GitHub repo
 
+[Click here for repo](https://github.com/alex-the-pigeon/AlexKaracsay_T2A2)
 
 **REFERENCES**
 
@@ -143,3 +154,5 @@ In order to keep organised, both a Trello board and to-do checklist were used du
 [JWT.io](https://jwt.io/introduction)
 
 [NordVPN - Bcrypt](https://nordvpn.com/blog/what-is-bcrypt)
+
+*Thank you for taking the time to read my documentation*. :D
