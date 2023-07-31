@@ -16,8 +16,8 @@ class RaceSchema(ma.Schema):
     user = fields.Nested('UserSchema', only=['id', 'race_name', 'race_type'])
 
     class Meta:
-        fields = ('id', 'last_name', 'first_name', 'sex', 'age')
+        fields = ('id', 'race_name', 'race_type',)
         ordered = True # this sets the order (as above) in which the data is dumped so it is consistent
 
-rider_schema = RaceSchema()
-riders_schema = RaceSchema(many=True)
+
+race_schema = RaceSchema(many=True)

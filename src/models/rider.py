@@ -15,7 +15,7 @@ class Rider(db.Model):
     user = db.relationship('User', back_populates='riders')
 
 class RiderSchema(ma.Schema):
-    user = fields.Nested('UserSchema', only=['id', 'username', 'email', 'password', 'is_admin'])
+    user = fields.Nested('UserSchema', only=['id', 'last_name', 'first_name', 'sex', 'age'])
 
     class Meta:
         fields = ('id', 'last_name', 'first_name', 'sex', 'age')

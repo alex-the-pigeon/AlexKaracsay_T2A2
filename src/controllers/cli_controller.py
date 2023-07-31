@@ -2,6 +2,8 @@ from flask import Blueprint
 from init import db, bcrypt 
 from models.user import User 
 from models.rider import Rider
+from models.race import Race
+from models.safety import Safety
 
 db_commands = Blueprint('db', '__name__')
 
